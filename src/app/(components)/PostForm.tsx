@@ -12,7 +12,7 @@ import { CancelButton, SubmitButton } from '@/components/common/FormButtons';
 
 import type { Params } from '@/types/posts';
 
-const NoticeEditor = dynamic(() => import('../(components)/NoticeEditor'), { ssr: false });
+const NoticeEditor = dynamic(() => import('./NoticeEditor'), { ssr: false });
 
 const PostForm = () => {
   const { getCurrentUserProfile } = useAuth();
@@ -28,7 +28,6 @@ const PostForm = () => {
     { id: 'diary', value: '일기', label: '일기' }
   ];
 
-
   const params = useParams<Params>();
   const categoryNow = decodeURIComponent(params.category);
 
@@ -41,9 +40,10 @@ const PostForm = () => {
     queryFn: getCurrentUserProfile
   });
 
-  const categories = profile?.email === 'daejang@mmeasy.com' 
-  ? [{ id: 'notice', value: '공지', label: '공지' }, ...baseCategories]
-  : baseCategories;
+  const categories =
+    profile?.email === 'daejang@mmeasy.com'
+      ? [{ id: 'notice', value: '공지', label: '공지' }, ...baseCategories]
+      : baseCategories;
 
   if (isLoading) return <div>Loading profile...</div>;
   if (error) return <div>An error occurred: {error instanceof Error ? error.message : 'Unknown error'}</div>;
@@ -106,7 +106,7 @@ const PostForm = () => {
 
   return (
     <main className="grid grid-cols-[16%_84%] h-[84vh]">
-      <div className='bg-bgColor1 border-r-2 border-solid border-pointColor1'>
+      <div className="bg-bgColor1 border-r-2 border-solid border-pointColor1">
         <CategorySelector categoryNow={categoryNow} />
       </div>
       <form onSubmit={handleNewPost} className="w-full mt-[4vh] px-48">

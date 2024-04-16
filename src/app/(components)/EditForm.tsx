@@ -12,7 +12,7 @@ import type { CommunityEditFormProps, Params } from '@/types/posts';
 import CategorySelector from './CategorySelector';
 import { CancelButton, SubmitButton } from '@/components/common/FormButtons';
 
-const NoticeEditor = dynamic(() => import('../(components)/NoticeEditor'), { ssr: false });
+const NoticeEditor = dynamic(() => import('./NoticeEditor'), { ssr: false });
 
 const EditForm = ({ postId, prevTitle, prevContent, prevCategory, prevAuthorId }: CommunityEditFormProps) => {
   const { getCurrentUserProfile } = useAuth();
@@ -102,7 +102,7 @@ const EditForm = ({ postId, prevTitle, prevContent, prevCategory, prevAuthorId }
 
   return (
     <main className="grid grid-cols-[16%_84%]">
-      <div className='bg-bgColor1 border-r-2 border-solid border-pointColor1'>
+      <div className="bg-bgColor1 border-r-2 border-solid border-pointColor1">
         <CategorySelector categoryNow={categoryNow} />
       </div>
       <form
