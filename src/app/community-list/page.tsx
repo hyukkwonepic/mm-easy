@@ -1,17 +1,18 @@
 // CommunityPage.tsx
-'use client';
+// 'use client';
 
-import CommunityMain from '../(components)/CommunityMain';
-import { Suspense } from 'react';
+import { redirect } from 'next/navigation';
 
 const CommunityPage = () => {
-  return (
-    <div>
-      <Suspense>
-        <CommunityMain />
-      </Suspense>
-    </div>
-  );
+  // return null;
+  redirect('/community-list/전체');
+  // return (
+  //   <div>
+  //     <Suspense>
+  //       <CommunityMain />
+  //     </Suspense>
+  //   </div>
+  // );
 };
 
 export default CommunityPage;

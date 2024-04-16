@@ -9,7 +9,6 @@ import { updateCommunityPost } from '@/api/posts';
 import { toast } from 'react-toastify';
 
 import type { CommunityEditFormProps, Params } from '@/types/posts';
-import CategorySelector from './CategorySelector';
 import { CancelButton, SubmitButton } from '@/components/common/FormButtons';
 
 const NoticeEditor = dynamic(() => import('./NoticeEditor'), { ssr: false });
@@ -101,61 +100,56 @@ const EditForm = ({ postId, prevTitle, prevContent, prevCategory, prevAuthorId }
   }
 
   return (
-    <main className="grid grid-cols-[16%_84%]">
-      <div className="bg-bgColor1 border-r-2 border-solid border-pointColor1">
-        <CategorySelector categoryNow={categoryNow} />
+    <form
+      className="py-12 px-48"
+      onSubmit={async (e) => {
+        e.preventDefault();
+        await updateCommunityPost(postId, title, content, category);
+        toast('수정이 완료되었습니다.');
+        navigateToCreatedPost(postId);
+        console.log('content => ', content);
+      }}
+    >
+      <section className="flex border-b border-pointColor1 border-solid">
+        {categories.map((item) => (
+          <div key={item.id}>
+            <input
+              className="hidden"
+              type="radio"
+              id={item.id}
+              name="category"
+              value={item.value}
+              checked={category === item.value}
+              onChange={handleCategoryChange}
+            />
+            <label
+              className={`font-bold rounded-tl-lg rounded-tr-lg text-lg px-6 pt-1 cursor-pointer  ${
+                category === item.value ? 'bg-pointColor1 text-white' : 'bg-white'
+              }`}
+              htmlFor={item.id}
+            >
+              {item.label}
+            </label>
+          </div>
+        ))}
+      </section>
+      <div>
+        <input
+          className="focus:outline-none font-medium h-24 text-3xl placeholder-gray-300"
+          type="text"
+          value={title}
+          onChange={handleTitle}
+          placeholder=" 제목을 입력하세요."
+        />
       </div>
-      <form
-        className="py-12 px-48"
-        onSubmit={async (e) => {
-          e.preventDefault();
-          await updateCommunityPost(postId, title, content, category);
-          toast('수정이 완료되었습니다.');
-          navigateToCreatedPost(postId);
-          console.log('content => ', content);
-        }}
-      >
-        <section className="flex border-b border-pointColor1 border-solid">
-          {categories.map((item) => (
-            <div key={item.id}>
-              <input
-                className="hidden"
-                type="radio"
-                id={item.id}
-                name="category"
-                value={item.value}
-                checked={category === item.value}
-                onChange={handleCategoryChange}
-              />
-              <label
-                className={`font-bold rounded-tl-lg rounded-tr-lg text-lg px-6 pt-1 cursor-pointer  ${
-                  category === item.value ? 'bg-pointColor1 text-white' : 'bg-white'
-                }`}
-                htmlFor={item.id}
-              >
-                {item.label}
-              </label>
-            </div>
-          ))}
-        </section>
-        <div>
-          <input
-            className="focus:outline-none font-medium h-24 text-3xl placeholder-gray-300"
-            type="text"
-            value={title}
-            onChange={handleTitle}
-            placeholder=" 제목을 입력하세요."
-          />
-        </div>
-        <div>
-          <NoticeEditor value={content} onChange={handleEditorChange} />
-        </div>
-        <div className="pt-14 flex justify-center gap-5 font-bold">
-          <CancelButton text="취소" onClick={handleCancel} width="w-[15%]" border="border-2" />
-          <SubmitButton text="완료" width="w-[15%]" />
-        </div>
-      </form>
-    </main>
+      <div>
+        <NoticeEditor value={content} onChange={handleEditorChange} />
+      </div>
+      <div className="pt-14 flex justify-center gap-5 font-bold">
+        <CancelButton text="취소" onClick={handleCancel} width="w-[15%]" border="border-2" />
+        <SubmitButton text="완료" width="w-[15%]" />
+      </div>
+    </form>
   );
 };
 

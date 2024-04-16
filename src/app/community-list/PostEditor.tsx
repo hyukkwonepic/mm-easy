@@ -12,11 +12,12 @@ import { CancelButton, SubmitButton } from '@/components/common/FormButtons';
 const TextEditor = dynamic(() => import('../(components)/NoticeEditor'), { ssr: false });
 
 type Props = {
+  defaultValues?: { category?: string; title?: string; content?: ReactQuill.Value };
   onCancel?: () => void;
   onSubmit?: (values: { category: string; title: string; content: ReactQuill.Value }) => void;
 };
 
-const PostEditor = ({ onCancel, onSubmit }: Props) => {
+const PostEditor = ({ defaultValues, onCancel, onSubmit }: Props) => {
   const { getCurrentUserProfile } = useAuth();
   const params = useParams<Params>();
 
@@ -30,9 +31,13 @@ const PostEditor = ({ onCancel, onSubmit }: Props) => {
   ];
   const categories = [...baseCategories];
 
-  const [selectedCategory, setSelectedCategory] = React.useState<string>(categories[0].value);
-  const [title, setTitle] = React.useState('');
-  const [textEditorValue, setTextEditorValue] = React.useState<ReactQuill.Value>('');
+  const [selectedCategory, setSelectedCategory] = React.useState<string>(
+    defaultValues?.category ? defaultValues.category : categories[0].value
+  );
+  const [title, setTitle] = React.useState(defaultValues?.title ? defaultValues.title : '');
+  const [textEditorValue, setTextEditorValue] = React.useState<ReactQuill.Value>(
+    defaultValues?.content ? defaultValues.content : ''
+  );
 
   const {
     data: profile,

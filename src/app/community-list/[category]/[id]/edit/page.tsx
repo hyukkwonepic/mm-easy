@@ -7,16 +7,16 @@ import { useQuery } from '@tanstack/react-query';
 import { useAuth } from '@/hooks/useAuth';
 
 import type { Post } from '@/types/posts';
-import { fetchPost } from '@/api/posts';
+import { fetchPost, updateCommunityPost } from '@/api/posts';
+import PostEditor from '@/app/community-list/PostEditor';
+import { toast } from 'react-toastify';
+import { useRouter } from 'next/navigation';
 
-const EditPage = ({ params }: { params: { id: string } }) => {
+const EditPage = ({ params }: { params: { id: string; category: string } }) => {
   const { getCurrentUserProfile } = useAuth();
   const postId = params.id;
 
-  const { data: userProfile, isLoading: isProfileLoading } = useQuery({
-    queryKey: ['userProfile'],
-    queryFn: getCurrentUserProfile
-  });
+  const router = useRouter();
 
   const {
     data: post,
@@ -35,19 +35,25 @@ const EditPage = ({ params }: { params: { id: string } }) => {
   });
 
   if (isLoading) return <div>Loading...</div>;
-  const { title, content, imageUrl, category, author_id } = post;
+
+  const navigateToCreatedPost = (postId: string) => {
+    router.push(`/community-list/${params.category}/${postId}`);
+  };
 
   return (
-    <div>
-      <EditForm
-        postId={postId}
-        prevTitle={title}
-        prevContent={content}
-        prevImageUrls={imageUrl}
-        prevCategory={category}
-        prevAuthorId={author_id}
-      />
-    </div>
+    <PostEditor
+      defaultValues={{
+        category: post.category,
+        title: post.title,
+        content: post.content
+      }}
+      onSubmit={async ({ category, title, content }) => {
+        await updateCommunityPost(postId, title, content as unknown as string, category);
+        toast('수정이 완료되었습니다.');
+        navigateToCreatedPost(postId);
+        console.log('content => ', content);
+      }}
+    />
   );
 };
 
