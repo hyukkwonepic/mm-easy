@@ -15,6 +15,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import useMultilingual from '@/utils/useMultilingual';
 import { useAtom } from 'jotai';
 import { langAtom } from '@/store/store';
+import { useRouter } from 'next/navigation';
 
 const MyProfile = ({ data }: { data: User }) => {
   const [lang, setLang] = useAtom(langAtom);
@@ -28,6 +29,8 @@ const MyProfile = ({ data }: { data: User }) => {
 
   const updateProfileMutation = useUpdateProfile();
   const queryClient = useQueryClient();
+
+  const router = useRouter();
 
   /** 수정 모달에서 취소하기 버튼 클릭 시 */
   const handleCancelBtn = () => {
@@ -75,8 +78,10 @@ const MyProfile = ({ data }: { data: User }) => {
         {
           onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['loggedInUser'] });
+            queryClient.invalidateQueries({ queryKey: ['loggedInUserErrrrrrrr'] });
             toast.success('프로필이 수정되었습니다.');
             setIsEditing(false);
+            router.refresh();
           }
         }
       );

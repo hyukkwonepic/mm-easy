@@ -34,7 +34,7 @@ const ProfileDropdown = () => {
 
   /** 로그인한 사용자의 정보를 profiles 테이블에서 불러옴 */
   const { data, isLoading, isError } = useQuery<User | null>({
-    queryKey: ['loggedInUser'],
+    queryKey: ['loggedInUserErrrrrrrr'],
     queryFn: async () => {
       try {
         const getSession = await supabase.auth.getSession();
@@ -45,7 +45,8 @@ const ProfileDropdown = () => {
         throw new Error('사용자 정보를 가져오는 데 실패했습니다.');
       }
     },
-    refetchOnWindowFocus: false
+    refetchOnWindowFocus: false,
+    // staleTime: 1000
   });
 
   if (isLoading) return <div>로딩</div>;

@@ -16,7 +16,7 @@ import { usePathname } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
 import { getUser } from '@/api/users';
 
-const Header = () => {
+const Header = ({ profileDropdown }: { profileDropdown: React.ReactNode }) => {
   const pathname = usePathname();
   const [isLoggedIn, setIsLoggedIn] = useAtom(isLoggedInAtom);
   const [currentUserEmail, setCurrentUserEmail] = useState<string>();
@@ -133,13 +133,18 @@ const Header = () => {
         </nav>
         <div className="flex justify-center items-center gap-5">
           <ToggleLanguage />
-          {isLoggedIn ? (
-            <ProfileDropdown />
+          {/* {isLoggedIn ? (
+            // <ProfileDropdown />
+            profileDropdown
           ) : (
             <Link href="/login">
               <button>{m('HEADER_LOGIN')}</button>
             </Link>
-          )}
+          )} */}
+          <>{profileDropdown}</>
+          <Link href="/login">
+            <button>{m('HEADER_LOGIN')}</button>
+          </Link>
         </div>
       </section>
     </header>

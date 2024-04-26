@@ -18,9 +18,11 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({
-  children
+  children,
+  profileDropdown
 }: Readonly<{
   children: React.ReactNode;
+  profileDropdown: React.ReactNode;
 }>) {
   return (
     <html lang="en">
@@ -28,7 +30,7 @@ export default function RootLayout({
         <main className="mx-auto bg-white lg:w-[1444px] lg:border-x-2 lg:border-solid lg:border-pointColor1 md:w-full ">
           <Provider>
             <QueryProvider>
-              <Header />
+              <Header profileDropdown={profileDropdown} />
               <ToastContainer />
               {children}
               <Footer />
